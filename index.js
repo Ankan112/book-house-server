@@ -26,7 +26,8 @@ async function run() {
     try {
         const database = client.db("Book-house");
         const productCollection = database.collection("product");
-        const orderCollection = database.collection('orders')
+        const orderCollection = database.collection('orders');
+        const userCollection = database.collection('users');
         // create a document to insert
         app.post('/products', async (req, res) => {
             const data = req.body;
@@ -61,7 +62,21 @@ async function run() {
             const result = await orderCollection.insertOne(data);
             res.send(result)
         })
-        app.get('/')
+        app.get('/orders', async (req, res) => {
+            const query = { email: req.query.email }
+            const cursor = await orderCollection.find(query).toArray()
+            res.send(cursor)
+        })
+        app.post('/users', async (req, res) => {
+            const data = req.body;
+            const result = await userCollection.insertOne(data);
+            res.send(result)
+        })
+        app.get('/users', async (req, res) => {
+            const query = { account: req.query.account }
+            const cursor = await userCollection.find(query).toArray()
+            res.send(cursor)
+        })
     }
     finally {
 
