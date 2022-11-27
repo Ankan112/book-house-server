@@ -95,6 +95,12 @@ async function run() {
             const user = await userCollection.findOne(query);
             res.send({ isBuyer: user?.account === 'buyer' })
         })
+        app.delete('/users/seller/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await userCollection.deleteOne(query)
+            res.send(result)
+        })
     }
     finally {
 
