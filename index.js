@@ -28,6 +28,7 @@ async function run() {
         const productCollection = database.collection("product");
         const orderCollection = database.collection('orders');
         const userCollection = database.collection('users');
+        const advertiseCollection = database.collection('advertise')
         // create a document to insert
         app.post('/products', async (req, res) => {
             const data = req.body;
@@ -50,6 +51,12 @@ async function run() {
             const query = { category: 'Sciencefiction' }
             const cursor = productCollection.find(query)
             const result = await cursor.toArray();
+            res.send(result)
+        })
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await productCollection.deleteOne(query)
             res.send(result)
         })
         app.get('/myproducts', async (req, res) => {
@@ -105,6 +112,11 @@ async function run() {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
             const result = await userCollection.deleteOne(query)
+            res.send(result)
+        })
+        app.post('/advertise/:id', async (req, res) => {
+            const data = req.body;
+            const result = await advertiseCollection.insertOne(data)
             res.send(result)
         })
     }
